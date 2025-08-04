@@ -5,167 +5,162 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Undangan Karo Lius</title>
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    * {margin: 0; padding: 0; box-sizing: border-box;}
-    body {
-      font-family: 'Open Sans', sans-serif;
-      background: #fffaf1;
-      overflow-x: hidden;
-    }
-    .envelope-screen {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: #f9f0dd;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      transition: opacity 0.8s ease;
-    }
-    .envelope-screen.hide {
-      opacity: 0;
-      pointer-events: none;
-    }
-    .envelope {
-      width: 440px;
-      height: 300px;
-      background: gold;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-family: 'Dancing Script', cursive;
-      font-size: 2rem;
-      cursor: pointer;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-      position: relative;
-      animation: fadeIn 1s ease-in-out;
-    }
-    .envelope::before {
-      content: '';
-      position: absolute;
-      top: -80px;
-      left: 0;
-      width: 0;
-      height: 0;
-      border-left: 220px solid transparent;
-      border-right: 220px solid transparent;
-      border-bottom: 80px solid gold;
-    }
-    .container {
-      display: none;
-      flex-wrap: wrap;
-      min-height: 100vh;
-    }
-    .left, .right {
-      flex: 1;
-      padding: 30px;
-    }
-    .left {
-      background: linear-gradient(to bottom right, #fff8dc, #f3e5ab);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-    h1 {
-      font-family: 'Dancing Script', cursive;
-      font-size: 2.5rem;
-      color: #a67c00;
-      margin-bottom: 10px;
-    }
-    h2 {
-      font-family: 'Dancing Script', cursive;
-      font-size: 1.8rem;
-      color: #a86700;
-      text-align: center;
-      margin-top: 30px;
-    }
-    p { font-size: 1rem; margin: 8px 0; text-align: center; }
-    form, #lucky-draw {
-      margin-top: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    select, input, button, textarea {
-      margin: 5px 0;
-      padding: 10px;
-      font-size: 1rem;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      width: 80%;
-      max-width: 300px;
-      font-family: inherit;
-    }
-    .music-btn {
-      background: #d4af37;
-      border: none;
-      padding: 10px 20px;
-      color: white;
-      font-weight: bold;
-      border-radius: 8px;
-      margin-top: 15px;
-      cursor: pointer;
-    }
-    .right {
-      background: #f8f0db;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .gallery img {
-      display: none;
-      width: 100%;
-      max-width: 400px;
-      border-radius: 10px;
-    }
-    .gallery img.active {
-      display: block;
-    }
-    #pesan-konfirmasi {
-      margin-top: 15px;
-      color: green;
-      font-weight: bold;
-      text-align: center;
-      display: none;
-    }
-    canvas#confetti-canvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      z-index: 1000;
-    }
-   
- 
-  .container {
+ <style>
+  * {margin: 0; padding: 0; box-sizing: border-box;}
+  body {
+    font-family: 'Open Sans', sans-serif;
+    background: #fffaf1;
+    overflow-x: hidden;
+  }
+  .envelope-screen {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: #f9f0dd;
     display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.8s ease;
+  }
+  .envelope-screen.hide {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .envelope {
+    width: 440px;
+    height: 300px;
+    background: gold;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-family: 'Dancing Script', cursive;
+    font-size: 2rem;
+    cursor: pointer;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    position: relative;
+    animation: fadeIn 1s ease-in-out;
+  }
+  .envelope::before {
+    content: '';
+    position: absolute;
+    top: -80px;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 220px solid transparent;
+    border-right: 220px solid transparent;
+    border-bottom: 80px solid gold;
+  }
+  .container {
+    display: none;
     flex-wrap: wrap;
     min-height: 100vh;
   }
+  .left, .right {
+    flex: 1;
+    padding: 30px;
+  }
+  .left {
+    background: linear-gradient(to bottom right, #fff8dc, #f3e5ab);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  h1 {
+    font-family: 'Dancing Script', cursive;
+    font-size: 2.5rem;
+    color: #a67c00;
+    margin-bottom: 10px;
+  }
+  h2 {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.8rem;
+    color: #a86700;
+    text-align: center;
+    margin-top: 30px;
+  }
+  p {
+    font-size: 1rem;
+    margin: 8px 0;
+    text-align: center;
+  }
+  form, #lucky-draw {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  select, input, button, textarea {
+    margin: 5px 0;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    width: 80%;
+    max-width: 300px;
+    font-family: inherit;
+  }
+  .music-btn {
+    background: #d4af37;
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    font-weight: bold;
+    border-radius: 8px;
+    margin-top: 15px;
+    cursor: pointer;
+  }
+  .right {
+    background: #f8f0db;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .gallery img {
+    display: none;
+    width: 100%;
+    max-width: 400px;
+    border-radius: 10px;
+  }
+  .gallery img.active {
+    display: block;
+  }
+  #pesan-konfirmasi {
+    margin-top: 15px;
+    color: green;
+    font-weight: bold;
+    text-align: center;
+    display: none;
+  }
+  canvas#confetti-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 1000;
+  }
 
-  
+  /* RESPONSIF UNTUK HP */
   @media (max-width: 768px) {
     .container {
       flex-direction: column;
     }
-
     .left, .right {
       width: 100%;
       padding: 20px;
     }
-
     .gallery img {
       max-width: 90%;
       margin: auto;
     }
   }
+</style>
 
-  </style>
 </head>
 <body>
 <div class="envelope-screen" id="envelope">
@@ -325,4 +320,5 @@ function startConfetti() {
 </script>
 </body>
 </html>
+
 
