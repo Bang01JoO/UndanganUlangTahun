@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Undangan Karo Lius</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {margin: 0; padding: 0; box-sizing: border-box;}
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background: #fffaf1;
+      overflow-x: hidden;
+    }
+    .envelope-screen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: #f9f0dd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.8s ease;
+    }
+    .envelope-screen.hide {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .envelope {
+      width: 440px;
+      height: 300px;
+      background: gold;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-family: 'Dancing Script', cursive;
+      font-size: 2rem;
+      cursor: pointer;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+      position: relative;
+      animation: fadeIn 1s ease-in-out;
+    }
+    .envelope::before {
+      content: '';
+      position: absolute;
+      top: -80px;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 220px solid transparent;
+      border-right: 220px solid transparent;
+      border-bottom: 80px solid gold;
+    }
+    .container {
+      display: none;
+      flex-wrap: wrap;
+      min-height: 100vh;
+    }
+    .left, .right {
+      flex: 1;
+      padding: 30px;
+    }
+    .left {
+      background: linear-gradient(to bottom right, #fff8dc, #f3e5ab);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    h1 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.5rem;
+      color: #a67c00;
+      margin-bottom: 10px;
+    }
+    h2 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.8rem;
+      color: #a86700;
+      text-align: center;
+      margin-top: 30px;
+    }
+    p { font-size: 1rem; margin: 8px 0; text-align: center; }
+    form, #lucky-draw {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    select, input, button, textarea {
+      margin: 5px 0;
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      width: 80%;
+      max-width: 300px;
+      font-family: inherit;
+    }
+    .music-btn {
+      background: #d4af37;
+      border: none;
+      padding: 10px 20px;
+      color: white;
+      font-weight: bold;
+      border-radius: 8px;
+      margin-top: 15px;
+      cursor: pointer;
+    }
+    .right {
+      background: #f8f0db;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .gallery img {
+      display: none;
+      width: 100%;
+      max-width: 400px;
+      border-radius: 10px;
+    }
+    .gallery img.active {
+      display: block;
+    }
+    #pesan-konfirmasi {
+      margin-top: 15px;
+      color: green;
+      font-weight: bold;
+      text-align: center;
+      display: none;
+    }
+    canvas#confetti-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+<div class="envelope-screen" id="envelope">
+  <div class="envelope" onclick="bukaUndangan()">💌 Buka Undangan</div>
+</div>
+
+<canvas id="confetti-canvas"></canvas>
+
+<div class="container" id="konten">
+  <div class="left">
+    <h1>🎉 Ulang Tahun ke-75 Karo 🎂</h1>
+    <p><strong>Dengan sukacita kami mengundang Saudara ke acara ulang tahun Karo</strong></p>
+    <p><strong>📍 Jl. Tani Baru 1, Medan</strong></p>
+    <p><strong>📅 15 Agustus 2025, pukul 17:00 WIB</strong></p>
+
+    <h2>Konfirmasi Kehadiran</h2>
+    <form id="rsvp-form">
+      <select id="kehadiran" required>
+        <option value="">Pilih Kehadiran</option>
+        <option value="ya">Ya, saya akan hadir</option>
+        <option value="tidak">Maaf, saya tidak bisa hadir</option>
+      </select>
+      <input type="text" id="nama" placeholder="Nama Anda" required style="display:none" />
+      <textarea id="doa" placeholder="Doa & Harapan untuk yang berulang tahun" style="display:none"></textarea>
+      <button type="submit" id="submit-btn">Kirim</button>
+    </form>
+
+    <div id="lucky-draw" style="display:none;">
+      <p id="soal"></p>
+      <input type="text" id="jawaban" placeholder="Jawaban Anda"/>
+      <button id="submit-jawaban">Jawab</button>
+    </div>
+
+    <p id="pesan-konfirmasi"></p>
+    <audio id="bg-music" src="Happy.mp3" autoplay loop></audio>
+  </div>
+
+  <div class="right">
+    <div class="gallery">
+      <img src="Foto1.jpg" class="active"/>
+      <img src="Foto2.jpg" />
+      <img src="Foto3.jpg" />
+    </div>
+  </div>
+</div>
+
+<script>
+function bukaUndangan() {
+  document.getElementById('envelope').classList.add('hide');
+  setTimeout(() => {
+    document.getElementById('envelope').style.display = 'none';
+    document.getElementById('konten').style.display = 'flex';
+    startConfetti();
+document.getElementById("bg-music").play();
+  }, 800);
+}
+
+const soalList = [
+  { soal: "Tanggal berapa Ulang Tahun Karo?", jawaban: ["7 agustus"] },
+  { soal: "Cucu karo paling muda?", jawaban: ["geraldin", "andin"] },
+  { soal: "Ukuran sepatu karo?", jawaban: ["37"] },
+  { soal: "Tahun 2022 berapa usia Karo?", jawaban: ["72"] },
+  { soal: "Merk handphone karo?", jawaban: ["vivo"] }
+];
+
+const kehadiran = document.getElementById("kehadiran");
+const namaInput = document.getElementById("nama");
+const doaInput = document.getElementById("doa");
+const form = document.getElementById("rsvp-form");
+const submitBtn = document.getElementById("submit-btn");
+const luckyDiv = document.getElementById("lucky-draw");
+const soalEl = document.getElementById("soal");
+const inputJawaban = document.getElementById("jawaban");
+const btnJawab = document.getElementById("submit-jawaban");
+const pesan = document.getElementById("pesan-konfirmasi");
+
+let soalIndex, namaFinal, kehadiranFinal, hasilLucky;
+
+kehadiran.addEventListener("change", () => {
+  const val = kehadiran.value;
+  namaInput.style.display = val ? "block" : "none";
+  doaInput.style.display = val === "tidak" ? "block" : "none";
+});
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  namaFinal = namaInput.value.trim();
+  kehadiranFinal = kehadiran.value;
+
+  if (kehadiranFinal === "tidak") {
+    simpanData(namaFinal, kehadiranFinal, "-", doaInput.value.trim());
+    pesan.innerText = "Terima kasih atas konfirmasinya.";
+    pesan.style.display = "block";
+  } else if (kehadiranFinal === "ya") {
+    const konfirmasi = confirm("Anda memiliki 1 kesempatan untuk menjawab pertanyaan Lucky Draw. Ingin lanjut?");
+    if (konfirmasi) {
+      soalIndex = Math.floor(Math.random() * soalList.length);
+      soalEl.innerText = soalList[soalIndex].soal;
+      luckyDiv.style.display = "block";
+      form.style.display = "none";
+    }
+  }
+});
+
+btnJawab.addEventListener("click", () => {
+  const jawabanUser = inputJawaban.value.trim().toLowerCase();
+  const benar = soalList[soalIndex].jawaban.includes(jawabanUser);
+  hasilLucky = `Soal ${soalIndex + 1}, ${benar ? "benar" : "salah"}`;
+  alert(benar ? "🎉 Selamat! Anda dapat hadiah Lucky Draw." : "😄 Anda kurang beruntung!");
+  simpanData(namaFinal, kehadiranFinal, hasilLucky, "");
+  luckyDiv.style.display = "none";
+  pesan.innerText = `Kami menunggu kehadiran saudara ${namaFinal} di perayaan nanti.`;
+  pesan.style.display = "block";
+});
+
+function simpanData(nama, hadir, lucky, doa) {
+  const url = "https://script.google.com/macros/s/AKfycbzGwZTM7gpNDxjMFMrKZ-g_qlpoyD3SOkq8ny1ThCColHSctwFLZSTz4CHm1JnJ6D-nMg/exec";
+  fetch(`${url}?nama=${encodeURIComponent(nama)}&kehadiran=${encodeURIComponent(hadir)}&lucky=${encodeURIComponent(lucky)}&doa=${encodeURIComponent(doa)}`)
+    .then(res => res.text()).then(console.log).catch(console.error);
+}
+
+function startConfetti() {
+  const canvas = document.getElementById("confetti-canvas");
+  const ctx = canvas.getContext("2d");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const pieces = [];
+  const colors = ["#f00", "#0f0", "#00f", "#ff0", "#f0f", "#0ff"];
+  for (let i = 0; i < 150; i++) {
+    pieces.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * -canvas.height,
+      size: Math.random() * 6 + 4,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      speed: Math.random() * 3 + 2,
+      angle: Math.random() * 360,
+      rotateSpeed: Math.random() * 10
+    });
+  }
+  function update() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let p of pieces) {
+      p.y += p.speed;
+      p.angle += p.rotateSpeed;
+      if (p.y > canvas.height) p.y = -p.size;
+      ctx.fillStyle = p.color;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate((p.angle * Math.PI) / 180);
+      ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+      ctx.restore();
+    }
+    requestAnimationFrame(update);
+  }
+  update();
+}
+</script>
+</body>
+</html>
